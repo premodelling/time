@@ -74,3 +74,33 @@ summary(lm.fit3)
 lm.fit0 <- lm(CO2 ~ t ,
               data=co2)
 anova(lm.fit0,lm.fit1)
+
+
+### Piecewise constant
+
+co2$season <- rep(NA)
+co2$season[co2$Month==12 | (co2$Month>=1 & co2$Month<=2)] <- "Winter"
+co2$season[co2$Month>=3 & co2$Month<=5] <- "Spring"
+co2$season[co2$Month>=6 & co2$Month<=9] <- "Summer"
+co2$season[co2$Month==10 | co2$Month==11] <- "Autumn"
+
+lm.fit4 <- lm(CO2 ~ t + 
+                season,
+              data=co2)
+
+summary(lm.fit4)
+
+plot(co2$t,co2$CO2,type="l")
+lines(co2$t,predict(lm.fit4),col=2)
+
+seasonality.lm4 <- rep(NA,12)
+beta.hat.lm4 <- coef(lm.fit4)
+seasonality.lm4[c(1:2,12)] <- beta.hat.lm4[5]
+seasonality.lm4[3:5] <- beta.hat.lm4[3]
+seasonality.lm4[6:9] <- beta.hat.lm4[4]
+seasonality.lm4[10:11] <- 0
+
+matplot(year.t,cbind(seasonality.lm2,seasonality.lm4),
+        type="l",col=1:2,lwd=2)  
+
+acf(residuals(lm.fit4),lag.max = 40)
