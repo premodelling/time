@@ -1,0 +1,9 @@
+Package: time
+Type: Package
+Title: Time Series in Epidemiology Notes
+Version: 1.0
+Date: 2022-02-14
+Author: greyhypotheses
+Maintainer: greyhypotheses
+Description: The notes of masters module CHIC662, i.e., Time Series in Epidemiology
+License:
