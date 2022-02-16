@@ -7,7 +7,7 @@
 InstallPackages <- function (){
 
   packages <- c('tidyverse', 'ggplot2', 'moments', 'rmarkdown', 'stringr', 'latex2exp', 'mapview',
-                'healthcareai', 'equatiomatic', 'rstatix', 'matrixStats')
+                'healthcareai', 'equatiomatic', 'rstatix', 'matrixStats', 'patchwork')
 
   # Install
   .install <- function(x){
