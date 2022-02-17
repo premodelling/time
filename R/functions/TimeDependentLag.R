@@ -28,14 +28,18 @@ TimeDependentLag <- function (frame, frame.date, frame.focus, frame.date.granula
     names(series) <- paste0(tolower(frame.focus), '_lag_', lag)
     return(series)
   }
-  vectors <- lapply(X = lags, FUN = lagfunction)
-  reference <- cbind( reference[!(names(reference) %in% frame.focus)], dplyr::bind_cols(vectors))
+  vectors <- dplyr::bind_cols(lapply(X = lags, FUN = lagfunction))
+  lagfields <- names(vectors)
+
+
+  # append the lagged fields to the reference data frame
+  reference <- cbind( reference[!(names(reference) %in% frame.focus)], vectors)
 
 
   # finally, focus on the original set of dates
   frame <- dplyr::left_join(x = frame, y = reference, by = frame.date)
 
   
-  return(frame)
+  return(list(frame = frame, lagfields = lagfields))
 
 }
