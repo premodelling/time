@@ -3,6 +3,12 @@
 # Created by: greyhypotheses
 # Created on: 16/02/2022
 
+
+#' Draws the graphs of ln(cases) vs. Lagged rainfall series
+#'
+#' @param data: a Kericho data set that includes cases, and lagged rain fields
+#' @param lagfields: the lagged rain fields
+#'
 Rainfall <- function (data, lagfields) {
 
   data %>%
