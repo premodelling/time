@@ -4,15 +4,20 @@
 # Created on: 16/02/2022
 
 
+source(file = 'R/01/StudyData.R')
 
-ModellingData <- function (instances, variable) {
+
+ModellingData <- function (variable) {
+
+  instances <- StudyData()
   data <- instances[!is.na(instances[variable]),]
+
   return(data)
 }
 
-ModellingDataGraph <- function (instances, variable) {
+ModellingDataGraph <- function (variable) {
 
-  data <- ModellingData(instances = instances, variable = variable)
+  data <- ModellingData(variable = variable)
 
   # excercise 2.1: time vs variable
   ggplot(data = data, mapping = aes(x = time, y = !!sym(variable))) +
@@ -22,9 +27,9 @@ ModellingDataGraph <- function (instances, variable) {
 }
 
 
-ModellingSeasonSingle <- function (instances, variable) {
+ModellingSeasonSingle <- function (variable) {
 
-  data <- ModellingData(instances = instances, variable = variable)
+  data <- ModellingData(variable = variable)
 
   # excercise 2.2a
   # $Y_{i} = \beta_{0} + \beta_1 x_{i} + \beta_2 sin(2 pi x_{i}/12) + \beta_3 cos(2 pi x_{i}/12) + Z_{i}$
@@ -41,9 +46,9 @@ ModellingSeasonSingle <- function (instances, variable) {
 }
 
 
-ModellingSeasonDouble <- function (instances, variable, estimates) {
+ModellingSeasonDouble <- function (variable, estimates) {
 
-  data <- ModellingData(instances = instances, variable = variable)
+  data <- ModellingData(variable = variable)
 
   # exercise 2.3a
   expr <- ' ~ sin(2*pi*time/12) + cos(2*pi*time/12) + sin(2*pi*time/6) + cos(2*pi*time/6)'
