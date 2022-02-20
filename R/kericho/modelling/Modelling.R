@@ -4,9 +4,12 @@
 # Created on: 16/02/2022
 
 
-source(file = 'R/01/StudyData.R')
+source(file = 'R/kericho/StudyData.R')
 
 
+#'
+#' @param variable: the variable being modellied
+#'
 ModellingData <- function (variable) {
 
   instances <- StudyData()
@@ -15,6 +18,10 @@ ModellingData <- function (variable) {
   return(data)
 }
 
+
+#'
+#' @param variable: the variable being modellied
+#'
 ModellingDataGraph <- function (variable) {
 
   data <- ModellingData(variable = variable)
@@ -27,53 +34,17 @@ ModellingDataGraph <- function (variable) {
 }
 
 
-ModellingSeasonSingle <- function (variable) {
+#'
+#' for exercise 2.3a & exercise 2.3b
+#'
+#' @param variable: the variable being modelled
+#' @param expr: the right hand side of the lm() formula, ic
+#'
+ModellingAlgorithm <- function(variable, expr) {
 
   data <- ModellingData(variable = variable)
-
-  # excercise 2.2a
-  # $Y_{i} = \beta_{0} + \beta_1 x_{i} + \beta_2 sin(2 pi x_{i}/12) + \beta_3 cos(2 pi x_{i}/12) + Z_{i}$
-
-  # exercise 2.2b: the linear regression model that accounts for seasonal trend, for a season period of 1 year
-  expr <- ' ~ sin(2*pi*time/12) + cos(2*pi*time/12)'
-  model <- lm(as.formula( paste0(variable, expr ) ), data = data, x = TRUE)
-
-  # exercise 2.2c: original & predictions
-  estimates <- cbind(data[,c(variable, 'time')], annual = model$fitted.values)
+  model <- lm( as.formula(paste0(variable, ' ~ ', expr)), data = data, x = TRUE)
+  estimates <- cbind(data[,c(variable, 'time')], prediction = model$fitted.values)
 
   return(list(model = model, estimates = estimates))
-
-}
-
-
-ModellingSeasonDouble <- function (variable, estimates) {
-
-  data <- ModellingData(variable = variable)
-
-  # exercise 2.3a
-  expr <- ' ~ sin(2*pi*time/12) + cos(2*pi*time/12) + sin(2*pi*time/6) + cos(2*pi*time/6)'
-  model <- lm( as.formula(paste0(variable, expr)), data = data, x = TRUE)
-
-  # exercise 2.3b
-  estimates <- cbind(estimates, biannual = model$fitted.values)
-
-  return(list(model = model, estimates = estimates))
-
-}
-
-
-ModellingAutocorrelogram <- function (estimates, models) {
-
-  # exercise 2.3c
-  residues <- list(single = residuals(models$single),
-                   double = residuals(models$double))
-
-  par(mfrow = c(1, 2))
-  plot(estimates$time, residues$single, type = "l", frame.plot = FALSE)
-  acf(residues$single, frame.plot = FALSE)
-
-  par(mfrow = c(1, 2))
-  plot(estimates$time, residues$double, type = "l", frame.plot = FALSE)
-  acf(residues$double, frame.plot = FALSE)
-
 }
