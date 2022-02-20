@@ -33,12 +33,3 @@ TripleOptimisation <- function (model, data, variable) {
 
 }
 
-
-DoubleOptimisation <- function () {
-
-  # phi, sigmasqr
-
-
-
-
-}
