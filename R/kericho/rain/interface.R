@@ -9,7 +9,6 @@
 
 # external functions
 source(file = 'R/01/StudyData.R')
-source(file = 'R/01/ExplorationGraph.R')
 source(file = 'R/01/functions/TimeDependentLag.R')
 source(file = 'R/01/rain/Rainfall.R')
 source(file = 'R/01/rain/Regression.R')
@@ -18,9 +17,6 @@ source(file = 'R/01/rain/Regression.R')
 # data
 instances <- StudyData()
 
-
-# excercise 1.1: relationships
-ExplorationGraphNL(instances = instances)
 
 
 # excercise 1.2a: lagged rainfall series
