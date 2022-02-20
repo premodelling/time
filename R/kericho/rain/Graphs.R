@@ -30,5 +30,4 @@ RainSeriesGraphs <- function (data, lagfields) {
           axis.title.x = element_text(size = 13), axis.title.y = element_text(size = 13)) +
     xlab(label = '\nmm\n')
 
-
 }
