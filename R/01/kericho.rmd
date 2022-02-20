@@ -1,0 +1,34 @@
+---
+title: "Kericho"
+author: greyhypotheses
+output:
+  rmarkdown::pdf_document:
+    keep_tex: FALSE
+    number_sections: FALSE
+    extra_dependencies:
+      - booktabs
+---
+
+
+
+The code chunk appears:
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.table.format = 'latex')
+options(knitr.kable.NA = '')
+```
+
+<!--- import --->
+```{r include = FALSE}
+library(xtable)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(matrixStats)
+
+library(magrittr)
+library(latex2exp)
+library(patchwork)
+library(kableExtra)
+```
