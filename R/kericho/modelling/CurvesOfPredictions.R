@@ -3,6 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 17/02/2022
 
+
 CurvesOfPredictions <- function (estimates) {
 
   estimates %>%
