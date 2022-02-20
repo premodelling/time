@@ -8,10 +8,10 @@
 
 
 # external functions
-source(file = 'R/01/StudyData.R')
-source(file = 'R/01/functions/TimeDependentLag.R')
-source(file = 'R/01/rain/Rainfall.R')
-source(file = 'R/01/rain/Regression.R')
+source(file = 'R/kericho/StudyData.R')
+source(file = 'R/kericho/functions/TimeDependentLag.R')
+source(file = 'R/kericho/rain/Graphs.R')
+source(file = 'R/kericho/rain/Regression.R')
 
 
 # data
@@ -26,7 +26,7 @@ head(temporary$frame[temporary$lagfields])
 
 
 # excercise 1.2b: graphs of ln(cases) vs. lagged rainfall series
-Rainfall(data = temporary$frame, lagfields = temporary$lagfields)
+RainSeriesGraphs(data = temporary$frame, lagfields = temporary$lagfields)
 
 
 # exercise 1.2c: correlation between ln(cases) and each lagged rainfall series
