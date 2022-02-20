@@ -3,6 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 16/02/2022
 
+
 TimeDependentLag <- function (frame, frame.date, frame.focus, frame.date.granularity, lags) {
 
   # foremost, a time series without missing time points
