@@ -3,9 +3,15 @@
 # Created by: greyhypotheses
 # Created on: 19/02/2022
 
+
 source(file = 'R/kericho/likelihood/MLEU.R')
 
-#' phi, mu, sigmasqr
+
+#' for estimating phi, mu, sigmasqr via MLEU()
+#'
+#' @param model: a lm() model from whence external regressors, i.e., its design matrix variables, are extracted
+#' @param data: the modelling data of <model>
+#' @param variable: the variable being modelled
 #'
 InterfaceMLEU <- function (model, data, variable) {
 
@@ -16,7 +22,7 @@ InterfaceMLEU <- function (model, data, variable) {
   Y <- data.frame(y = data[[variable]])
 
 
-  # Determine the parameters ...
+  # Initialising the parameters to be determined ...
   phi_ <- 0.5
   beta_ <- as.numeric(estimate$coefficients[,'Estimate'])
   sigmasqr_ <- 0.4
