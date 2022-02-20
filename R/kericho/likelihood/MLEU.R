@@ -3,7 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 19/02/2022
 
-MLEX <- function (par, df) {
+MLEU <- function (par, df) {
 
   # the coefficients being estimated
   parameters <- par[!(names(par) %in% c('phi', 'sigmasqr'))]
