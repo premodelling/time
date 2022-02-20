@@ -1,4 +1,4 @@
-# Title     : kericho.R
+# Title     : main.R
 # Objective : Tutorial
 # Created by: greyhypotheses
 # Created on: 14/02/2022
