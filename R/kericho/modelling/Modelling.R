@@ -26,7 +26,7 @@ ModellingDataGraph <- function (variable) {
 
   data <- ModellingData(variable = variable)
 
-  # excercise 2.1: time vs variable
+  # time vs variable
   ggplot(data = data, mapping = aes(x = time, y = !!sym(variable))) +
     geom_point(alpha = 0.25) +
     geom_smooth(se = FALSE, method = 'lm', formula = 'y ~ x', col = 'green') +
@@ -35,12 +35,10 @@ ModellingDataGraph <- function (variable) {
 
 
 #'
-#' for exercise 2.3a & exercise 2.3b
-#'
 #' @param variable: the variable being modelled
 #' @param expr: the right hand side of the lm() formula, ic
 #'
-ModellingAlgorithm <- function(variable, expr) {
+ModellingLinear <- function(variable, expr) {
 
   data <- ModellingData(variable = variable)
   model <- lm( as.formula(paste0(variable, ' ~ ', expr)), data = data, x = TRUE)
@@ -49,3 +47,49 @@ ModellingAlgorithm <- function(variable, expr) {
 
   return(list(model = model, estimates = estimates))
 }
+
+
+#'
+#' @param variable: the variable being modelled
+#' @param expr: the right hand side of the lm() formula, ic
+#'
+ModellingAutoregressive <- function(variable, expr) {
+
+  data <- ModellingData(variable = variable)
+
+
+  # External regressors for arima() via linear regression model
+  linear <- ModellingLinear(variable = variable, expr = expr)
+  lrmodel <- linear$model
+  X <- lrmodel$x[, -1]
+
+
+  # ARIMA
+  armodel <- arima(x = data[variable], order = c(1, 0, 0), xreg = X, method = 'ML')
+
+
+  # ARIMA predictions via original - residuals
+  # predictions <- data.frame(data[variable], residual = as.numeric(armodel$residuals))
+
+  predictions <- data.frame(predicted = data[[variable]] - as.numeric(armodel$residuals))
+  print(predictions)
+  names(predictions) <- paste0(variable, '_predicted')
+  estimates <- cbind(data[,c(variable, 'time')], predictions)
+
+  return(list(model = armodel, estimates = estimates))
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
