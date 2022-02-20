@@ -1,4 +1,4 @@
-# Title     : Curves.R
+# Title     : CurvesOfPredictions.R
 # Objective : TODO
 # Created by: greyhypotheses
 # Created on: 17/02/2022
