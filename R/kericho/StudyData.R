@@ -6,7 +6,7 @@
 StudyData <- function () {
 
   # data
-  instances <- read.csv(file = 'docs/day/01/Kericho.csv')
+  instances <- read.csv(file = 'docs/programme/kericho/kericho.csv')
   instances$Month <- factor(x = instances$Month,
                             levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), ordered = TRUE)
