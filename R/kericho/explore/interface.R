@@ -13,5 +13,6 @@ source(file = 'R/kericho/explore/ExplorationGraph.R')
 instances <- StudyData()
 
 
+# excercise 1.1: relationships
 # ln(cases) vs. maxT, minT, Rain
 ExplorationGraphNL(instances = instances)
