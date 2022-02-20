@@ -45,6 +45,7 @@ ModellingAlgorithm <- function(variable, expr) {
   data <- ModellingData(variable = variable)
   model <- lm( as.formula(paste0(variable, ' ~ ', expr)), data = data, x = TRUE)
   estimates <- cbind(data[,c(variable, 'time')], prediction = model$fitted.values)
+  names(estimates)[names(estimates) == 'prediction'] <- paste0(variable, '_predicted')
 
   return(list(model = model, estimates = estimates))
 }
