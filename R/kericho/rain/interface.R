@@ -42,3 +42,4 @@ correlations
 # exercise 1.3
 regression <- Regression(data = temporary$frame, lagfields = temporary$lagfields)
 merge(x = regression, y = t(correlations), by = 0)
+
