@@ -3,9 +3,15 @@
 # Created by: greyhypotheses
 # Created on: 20/02/2022
 
+
+# functios
 source(file = 'R/kericho/StudyData.R')
 source(file = 'R/kericho/explore/ExplorationGraph.R')
 
+
+# the data
 instances <- StudyData()
 
+
+# ln(cases) vs. maxT, minT, Rain
 ExplorationGraphNL(instances = instances)
