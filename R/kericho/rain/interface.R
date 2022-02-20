@@ -3,9 +3,6 @@
 # Created by: greyhypotheses
 # Created on: 19/02/2022
 
-#' Part 1
-#'
-
 
 # external functions
 source(file = 'R/kericho/StudyData.R')
@@ -16,7 +13,6 @@ source(file = 'R/kericho/rain/Regression.R')
 
 # data
 instances <- StudyData()
-
 
 
 # excercise 1.2a: lagged rainfall series
@@ -42,4 +38,3 @@ correlations
 # exercise 1.3
 regression <- Regression(data = temporary$frame, lagfields = temporary$lagfields)
 merge(x = regression, y = t(correlations), by = 0)
-
