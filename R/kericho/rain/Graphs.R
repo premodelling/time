@@ -1,4 +1,4 @@
-# Title     : Rainfall.R
+# Title     : Graphs.R
 # Objective : Natural logarithm of cases vs. Lagged rainfall series
 # Created by: greyhypotheses
 # Created on: 16/02/2022
