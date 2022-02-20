@@ -8,6 +8,7 @@
 source(file = 'R/kericho/modelling/Modelling.R')
 source(file = 'R/kericho/modelling/CurvesOfPredictions.R')
 source(file = 'R/kericho/modelling/Autocorrelogram.R')
+source(file = 'R/kericho/likelihood/InterfaceMLEU.R')
 
 
 # for a variable in focus, e.g., minT, maxT, and Rain
@@ -39,3 +40,7 @@ Autocorrelogram(time = data$time, residues = ardetails$model$residuals)
 lrlikelihood <- as.numeric(logLik(object = lrdetails$model))
 arlikelihood <- ardetails$model$loglik
 1 - pchisq( -2*(lrlikelihood - arlikelihood), df = 1 )
+
+
+# ... optimisation alternative
+mle <- InterfaceMLEU(model = lrdetails$model, data = data, variable = variable)
