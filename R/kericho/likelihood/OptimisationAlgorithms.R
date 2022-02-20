@@ -3,10 +3,11 @@
 # Created by: greyhypotheses
 # Created on: 19/02/2022
 
+source(file = 'R/kericho/likelihood/MLEU.R')
 
 #' phi, mu, sigmasqr
 #'
-TripleOptimisation <- function (model, data, variable) {
+InterfaceMLEU <- function (model, data, variable) {
 
   # Preliminaries
   estimate <- summary(object = model)
@@ -25,9 +26,8 @@ TripleOptimisation <- function (model, data, variable) {
 
 
   # Determine the parameters of ... via MLE
-  source(file = 'R/01/likelihood/MLEX.R')
   frame <- cbind(Y, design)
-  mle <- optim(par = par, fn = MLEX, df = frame, method = 'BFGS', control = list(maxit = 5000))
+  mle <- optim(par = par, fn = MLEU, df = frame, method = 'BFGS', control = list(maxit = 5000))
 
   return(mle)
 
