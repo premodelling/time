@@ -9,7 +9,7 @@ CurvesOfPredictions <- function (estimates) {
     gather(key = 'Variable', value = 'value', -time) %>%
     na.omit() %>%
     ggplot(mapping = aes(x = time, y = value)) +
-    geom_line(alpha = 0.35, mapping = aes(colour = factor(Type))) +
+    geom_line(alpha = 0.35, mapping = aes(colour = factor(Variable))) +
     theme_minimal()
 
 }
