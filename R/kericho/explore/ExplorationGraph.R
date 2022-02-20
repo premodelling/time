@@ -4,8 +4,6 @@
 # Created on: 16/02/2022
 
 
-# Excercise 1.1: Relationships
-
 #'
 #' Explores the relationship between ln(cases) and {minimum temperature,
 #' maximum temperature, rainfall}
