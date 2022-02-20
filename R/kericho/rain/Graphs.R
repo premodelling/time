@@ -9,7 +9,7 @@
 #' @param data: a Kericho data set that includes cases, and lagged rain fields
 #' @param lagfields: the lagged rain fields
 #'
-Rainfall <- function (data, lagfields) {
+RainSeriesGraphs <- function (data, lagfields) {
 
   data %>%
     dplyr::select(c(dplyr::all_of(lagfields), CasesLN)) %>%
