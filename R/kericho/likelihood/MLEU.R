@@ -3,6 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 19/02/2022
 
+
 MLEU <- function (par, df) {
 
   # the coefficients being estimated
@@ -18,7 +19,6 @@ MLEU <- function (par, df) {
 
   # Hence
   mu <- mean(design %*% beta)
-  print(mu)
 
 
   # the other parameters being estimated
@@ -36,7 +36,8 @@ MLEU <- function (par, df) {
   tailing <- Y[2:N, 'y']
   leading <- Y[1:(N-1), 'y']
 
-  # Unconditional
+
+  # Unconditional sum of squares
   F <- (tailing - mu) - phi*(leading - mu)
   unconditional <- (1 - phi^2)*((fore - mu)^2) + (F %*% F)
 
