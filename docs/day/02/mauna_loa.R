@@ -104,3 +104,34 @@ matplot(year.t,cbind(seasonality.lm2,seasonality.lm4),
         type="l",col=1:2,lwd=2)  
 
 acf(residuals(lm.fit4),lag.max = 40)
+
+#### Fitting and AR1 for lm.fit2
+# For an AR1, order=c(1,0,0)
+
+?arima0
+lm.fit2 <- lm(CO2 ~ t + 
+                sin(2*pi*t/12)+cos(2*pi*t/12)+
+                sin(2*pi*t/6)+cos(2*pi*t/6),
+              data=co2,x=TRUE)
+
+# Extract covariates and remove intercept
+mat.cov <- lm.fit2$x[,-1]
+
+ar1.fit <- 
+arima0(x=co2$CO2,
+       order=c(1,0,0),
+       xreg = mat.cov)
+
+# Likelihood ratio test
+# To test the significance of temporal correlation
+# Null hypothesis: phi=0
+1-pchisq(-2*(as.numeric(logLik(lm.fit2))-ar1.fit$loglik),df=1)
+
+acf(ar1.fit$residuals,lag.max = 40)
+
+ar1.pred <- co2$CO2-ar1.fit$residuals
+
+plot(co2$t,co2$CO2,type="l")
+lines(co2$t,ar1.pred,col=2)
+
+
