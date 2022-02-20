@@ -10,7 +10,7 @@
 # external functions
 source(file = 'R/01/StudyData.R')
 source(file = 'R/01/ExplorationGraph.R')
-source(file = 'R/functions/TimeDependentLag.R')
+source(file = 'R/01/functions/TimeDependentLag.R')
 source(file = 'R/01/rain/Rainfall.R')
 source(file = 'R/01/rain/Regression.R')
 
