@@ -54,6 +54,4 @@ MLEC <- function (par, df) {
   return(C)
 
 
-
-
 }
