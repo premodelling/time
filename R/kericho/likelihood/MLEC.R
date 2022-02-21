@@ -3,6 +3,11 @@
 # Created by: greyhypotheses
 # Created on: 20/02/2022
 
+
+#'
+#' @param par: c(beta_0, ..., beta_, phisqr, sigmasqr)
+#' @param df: a data frame of design variables & y
+#'
 MLEC <- function (par, df) {
 
   # the coefficients being estimated
