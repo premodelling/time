@@ -9,13 +9,15 @@ source(file = 'R/kericho/modelling/Modelling.R')
 source(file = 'R/kericho/modelling/CurvesOfPredictions.R')
 source(file = 'R/kericho/modelling/Autocorrelogram.R')
 source(file = 'R/kericho/likelihood/InterfaceMLEU.R')
+source(file = 'R/kericho/likelihood/InterfaceMLEC.R')
+source(file = 'R/kericho/modelling/Coefficients.R')
 
 
 # for a variable in focus, e.g., minT, maxT, and Rain
-variable <- 'minT'
+variable <- 'maxT'
 
 
-# ... the modelling data ser, such that observations wherein variable = NaN are excluded
+# ... the modelling data set, such that observations wherein variable = NaN are excluded
 data <- ModellingData(variable = variable)
 ModellingDataGraph(variable = variable)
 
@@ -43,4 +45,19 @@ arlikelihood <- ardetails$model$loglik
 
 
 # ... optimisation alternative
-mle <- InterfaceMLEU(model = lrdetails$model, data = data, variable = variable)
+mleu <- InterfaceMLEU(model = lrdetails$model, data = data, variable = variable)
+mlec <- InterfaceMLEC(model = lrdetails$model, data = data, variable = variable)
+
+
+# ... coefficients & phi
+x <- rbind(Coefficients(est = lrdetails$model$coefficients, modelname = 'linear regression'),
+           Coefficients(est = ardetails$model$coef, modelname = 'autoregressive'),
+           Coefficients(est = mlec$par, modelname = 'custom mle'))
+x['autoregressive', 'phi'] <- ardetails$model$coef['ar1']
+x['custom mle', 'phi'] <- sqrt(mlec$par['phisqr'])
+
+x
+
+
+
+
