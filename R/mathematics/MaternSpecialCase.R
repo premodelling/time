@@ -1,5 +1,5 @@
 # Title     : MaternSpecialCase.R
-# Objective : Matern Special Case
+# Objective : Matern Special Case ρ(distance) = exp(- distance / φ )
 # Created by: greyhypotheses
 # Created on: 22/02/2022
 
