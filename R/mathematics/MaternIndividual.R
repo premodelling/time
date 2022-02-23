@@ -3,10 +3,20 @@
 # Created by: greyhypotheses
 # Created on: 22/02/2022
 
-MaternIndividual <- function (limit, kappa, mu, sigmasqr, tausqr, rho) {
 
-  phi <- -1/log(rho)
+source('R/mathematics/SimulateMatern.R')
+source('R/mathematics/VariogramEnvelop.R')
 
+
+#' @param limit:
+#' @param by: granularity ...
+#' @param kappa: the smoothness parameter κ
+#' @param mu:
+#' @param sigmasqr:
+#' @param tausqr:
+#' @param phi: a set of range parameters φ
+#'
+MaternIndividual <- function (limit, by, kappa, mu, sigmasqr, tausqr, phi) {
 
   # a data set
   data <- SimulateMatern(start = 1, end = limit, mu = mu, sigmasqr = sigmasqr,
@@ -15,13 +25,13 @@ MaternIndividual <- function (limit, kappa, mu, sigmasqr, tausqr, rho) {
 
 
   # its abscissae
-  abscissae <- seq(from = 1, to = limit, by = 1)
+  abscissae <- seq(from = 1, to = limit, by = by)
 
 
   # the variogram objects of the data set
   geodata <- list(coords = cbind(abscissae, 1), data = data)
   variogram <- variog(coords = geodata$coords, data = geodata$data,
-                      uvec = seq(0, round(2 * limit / 3, digits = 0), by = 1))
+                      uvec = seq(0, round(2 * limit / 3, digits = 0), by = by))
 
 
   # the variogram graph
