@@ -40,6 +40,13 @@ Hence, [MLEC.R](./R/kericho/likelihood/MLEC.R) called by
 <br>
 <br>
 
+The distance between two points on the real line
+
+> d(x, y) = |x - y|
+
+<br>
+<br>
+
 ### Development Environment
 
 * Edit the help file skeletons in 'man', possibly combining help files
