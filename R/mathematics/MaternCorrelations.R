@@ -1,5 +1,5 @@
 # Title     : MaternCorrelations.R
-# Objective : Explore Matern via ρ, noting that ρ(h)
+# Objective : Explore Matern via ρ(distances | φ, κ)
 # Created by: greyhypotheses
 # Created on: 22/02/2022
 
@@ -23,7 +23,7 @@ MaternCorrelations <- function (limit, by, kappa, mu, sigmasqr, tausqr, PHI) {
 
   T <- function (phi) {
 
-    # series is rho(distances | φ, κ)
+    # the series is ρ(distances | φ, κ)
     series <- SimulateMatern(start = starting, end = limit, by = by, mu = mu, sigmasqr = sigmasqr,
                              phi = phi, kappa = kappa, tausqr = tausqr)
     geodata <- list(coords = cbind(abscissae, 1), data = series)
