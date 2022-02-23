@@ -1,9 +1,15 @@
 # Title     : VariogramEnvelop.R
-# Objective : TODO
+# Objective : Variogram envelop
 # Created by: greyhypotheses
 # Created on: 22/02/2022
 
 
+#'
+#' @param geodata: list(coords = ..., data = for example Matern based process)
+#' @param variogram: variogram object
+#' @param nenvelops: the umber of envelops to average
+#' @param nsim: the number of variog.mc.env() simulations
+#'
 VariogramEnvelop <- function (geodata, variogram, nenvelops, nsim) {
 
 
