@@ -33,22 +33,22 @@ StudyData <- function () {
 
 
   # preview
-  str(instances)
+  # str(instances)
 
 
   # the # of missing values per field  ... remember MAR,MCAR, MNAR
-  print('The number of missing fields per field:', quote = FALSE)
-  print(colSums(is.na(instances)))
+  # print('The number of missing fields per field:', quote = FALSE)
+  # print(colSums(is.na(instances)))
 
 
   # observations that have missing values  ... remember MAR,MCAR, MNAR
-  if (sum(complete.cases(instances)) != nrow(instances)) {
-    condition <- complete.cases(instances)
-    print('Instances that have missing values:', quote = FALSE)
-    instances[!condition, ] %>%
-      tibble() %>%
-      print()
-  }
+  # if (sum(complete.cases(instances)) != nrow(instances)) {
+  #   condition <- complete.cases(instances)
+  #   print('Instances that have missing values:', quote = FALSE)
+  #   instances[!condition, ] %>%
+  #     tibble() %>%
+  #     print()
+  # }
 
   return(instances)
 
