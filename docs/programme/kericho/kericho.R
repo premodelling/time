@@ -47,16 +47,28 @@ fit0.5 <- fit.matern(form=
                    method="nlminb")
 summary(fit0.5,log.cov.pars=FALSE)
 
+# exp(-h.star/phi.hat)=0.05 
+phi.hat <- coef(fit0.5)["phi"]
+h.star <- -phi.hat*log(0.05)
+
 fit1.5 <- fit.matern(form=
                        log(Cases) ~ t+I((t-50)*(t>50))+I(t>229)+
                        sin(2*pi*t/12)+cos(2*pi*t/12)+
                        sin(2*pi*t/6)+cos(2*pi*t/6),
                      time="t",
-                     start.cov.pars = c(1,5),
+                     start.cov.pars = c(2.59,0.05/0.16),
                      kappa=1.5,
                      data=mal,
                      method="nlminb")
-summary(fit1.5,log.cov.pars=FALSE)
+summary(fit1.5,log.cov.pars=TRUE)
+
+phi.hat <- coef(fit1.5)["phi"]
+# x is the time separation
+h.star <- 
+uniroot(function(x) matern(x,phi=phi.hat,kappa=1.5)-0.05,
+         lower=0.1,upper=12)$root
+  
+
 
 fit2.5 <- fit.matern(form=
                        log(Cases) ~ t+I((t-50)*(t>50))+I(t>229)+
