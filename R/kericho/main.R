@@ -17,6 +17,7 @@
 source(file = 'R/kericho/StudyData.R')
 source(file = 'R/kericho/functions/TimeDependentLag.R')
 source(file = 'docs/programme/mathematics/auxiliary_function.R')
+source(file = 'R/kericho/problems/fourth/PredictionsGraph.R')
 
 
 # data
@@ -40,9 +41,6 @@ lagged.variables <- dplyr::bind_cols(lagged.variables)
 instances <- cbind(instances, lagged.variables)
 
 
-
-
-
 # fit
 condition <- !is.na(instances$rain_lag_2) | !is.na(instances$mint_lag_2) | !is.na(instances$maxt_lag_2)
 excerpt <- instances[condition, ]
@@ -54,11 +52,28 @@ fit2.5 <- fit.matern(form =
                      kappa = 2.5,
                      data = excerpt,
                      method = 'nlminb')
-summary(fit2.5, log.cov.pars = TRUE)
 
 
+# model estimates
+estimates <- summary(fit2.5, log.cov.pars = TRUE)
 
 
+# the natural logarithm scale parameters
+parameters <- data.frame(estimates$cov.pars)
+parameters$interval <- qnorm(p = 0.975, lower.tail = TRUE) * parameters$StdErr
+parameters[, c('ln_lower_ci', 'ln_upper_ci')] <- parameters$Estimate +
+  matrix(data = parameters$interval) %*%  matrix(data = c(-1, 1), nrow = 1, ncol = 2)
 
 
+# exponentials of ...
+parameters[, c('lower_ci', 'upper_ci')] <- as.matrix(exp(parameters[, c('ln_lower_ci', 'ln_upper_ci')]))
 
+
+# predictions
+predictor <- time.predict(
+  fitted.model = fit2.5,
+  predictors = excerpt[, c('time', 'mint_lag_2', 'maxt_lag_2', 'rain_lag_2')],
+  time.pred = excerpt$time,
+  scale.pred = 'exponential')
+
+PredictionsGraph(predictor = predictor)
