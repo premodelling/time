@@ -26,7 +26,7 @@ time.predict <- function(fitted.model,predictors=NULL,time.pred,scale.pred=NULL,
     scale.pred <- "logit"
   }
   time.pred <- cbind(time.pred,1)
-  fit0.5$call$formula
+  print(fitted.model$call$formula)
   out <- spatial.pred.linear.MLE(object=fitted.model,
                           predictors = predictors,
                           grid.pred = time.pred,
