@@ -53,19 +53,23 @@ library(patchwork)
 library(kableExtra)
 ```
 
+The set of external functions used thus far - relative to, therefore based in, GitHub repository [premodelling/time](https://github.com/premodelling/time/tree/develop) - are
+
 <!--- External Functions --->
-```{r warning = FALSE, message = FALSE}
-sys.source(file = 'R/kericho/StudyData.R', envir = knitr::knit_global())
-sys.source(file = 'R/kericho/functions/TimeDependentLag.R',
-           envir = knitr::knit_global())
+\footnotesize
+```{r echo = TRUE, warning = FALSE, message = FALSE}
+  sys.source(file = 'R/kericho/StudyData.R', envir = knitr::knit_global())
+  sys.source(file = 'R/kericho/functions/TimeDependentLag.R',
+             envir = knitr::knit_global())
+  sys.source(file = 'R/kericho/problems/fourth/PredictionsGraph.R',
+             envir = knitr::knit_global())
 
-sys.source(file = 'docs/programme/mathematics/auxiliary_function.R',
-           envir = knitr::knit_global())
-
-sys.source(file = 'R/kericho/problems/fourth/PredictionsGraph.R',
-           envir = knitr::knit_global())
+  sys.source(file = 'docs/programme/mathematics/auxiliary_function.R',
+             envir = knitr::knit_global())
 ```
+\normalsize
 
+\vspace{35pt}
 
 # Problem 4
 
@@ -103,8 +107,8 @@ The original data set, with appended time dependent variables, is
 
 \footnotesize
 ```{r comment = '         ', warning = FALSE, message = FALSE}
-instances <- StudyData()
-str(object = instances)
+  instances <- StudyData()
+  str(object = instances)
 ```
 \normalsize
 
@@ -132,7 +136,16 @@ The function *TimeDependentLag()* creates lagged fields.  Hence, the lagged mini
 ```
 \normalsize
 
-\vspace{35pt}
+\vspace{20pt}
+
+\footnotesize
+```{r comment = '         ', warning = FALSE, message = FALSE}
+str(object = instances)
+```
+\normalsize
+
+
+\clearpage
 
 ## Exercise 1: Model Fitting
 
@@ -173,8 +186,8 @@ The summary of the model fitted for *Eq. 1* is ...
 
 \footnotesize
 ```{r comment = '         ', warning = FALSE, message = FALSE}
-estimates <- summary(fit2.5, log.cov.pars = TRUE)
-estimates
+  estimates <- summary(fit2.5, log.cov.pars = TRUE)
+  estimates
 ```
 \normalsize
 
@@ -186,10 +199,10 @@ The natural logarithm scale values of $\sigma^{2}$, $\phi^{2}$, and $\tau^{2}$, 
 
 \footnotesize
 ```{r echo = TRUE}
-parameters <- data.frame(estimates$cov.pars)
-parameters$interval <- qnorm(p = 0.975, lower.tail = TRUE) * parameters$StdErr
-parameters[, c('ln_lower_ci', 'ln_upper_ci')] <- parameters$Estimate +
-  matrix(data = parameters$interval) %*%  matrix(data = c(-1, 1), nrow = 1, ncol = 2)
+  parameters <- data.frame(estimates$cov.pars)
+  parameters$interval <- qnorm(p = 0.975, lower.tail = TRUE) * parameters$StdErr
+  parameters[, c('lower_ci', 'upper_ci')] <- parameters$Estimate +
+    matrix(data = parameters$interval) %*%  matrix(data = c(-1, 1), nrow = 1, ncol = 2)
 ```
 \normalsize
 
@@ -201,7 +214,9 @@ Consequently, their normal scale values are
 
 \footnotesize
 ```{r echo = TRUE}
-parameters[, c('lower_ci', 'upper_ci')] <- as.matrix(exp(parameters[, c('ln_lower_ci', 'ln_upper_ci')]))
+  parameters[, 'exp(Estimate)'] <- exp(parameters$Estimate)
+  parameters[, c('exp(lower_ci)', 'exp(upper_ci)')] <-
+    as.matrix(exp(parameters[, c('lower_ci', 'upper_ci')]))
 ```
 \normalsize
 
@@ -213,12 +228,13 @@ Hence
 
 \footnotesize
 ```{r comment = '         ', warning = FALSE, message = FALSE}
-parameters %>%
-        dplyr::select(!interval)
+  parameters %>%
+          dplyr::select(!interval) %>%
+          round(digits = 3)
 ```
 \normalsize
 
-\vspace{35pt}
+\clearpage
 
 ## Exercise 2: Predictions
 
