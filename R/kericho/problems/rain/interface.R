@@ -5,10 +5,10 @@
 
 
 # external functions
-source(file = 'R/kericho/StudyData.R')
+source(file = '../../StudyData.R')
 source(file = 'R/kericho/functions/TimeDependentLag.R')
-source(file = 'R/kericho/rain/Graphs.R')
-source(file = 'R/kericho/rain/Regression.R')
+source(file = 'Graphs.R')
+source(file = 'Regression.R')
 
 
 # data
