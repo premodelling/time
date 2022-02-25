@@ -4,9 +4,9 @@
 # Created on: 20/02/2022
 
 
-# functios
+# functions
 source(file = 'R/kericho/StudyData.R')
-source(file = 'R/kericho/explore/ExplorationGraph.R')
+source(file = 'R/kericho/problems/explore/ExplorationGraph.R')
 
 
 # the data
