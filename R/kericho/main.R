@@ -16,8 +16,10 @@
 # external functions
 source(file = 'R/kericho/StudyData.R')
 source(file = 'R/kericho/functions/TimeDependentLag.R')
-source(file = 'docs/programme/mathematics/auxiliary_function.R')
 source(file = 'R/kericho/problems/fourth/PredictionsGraph.R')
+
+source(file = 'docs/programme/mathematics/auxiliary_function.R')
+
 
 
 # data
@@ -25,32 +27,36 @@ instances <- StudyData()
 str(instances)
 
 
+
 # lagged series
-extra <- function (variable) {
-  temporary <- TimeDependentLag(frame = instances,
-                                frame.date = 'date',
-                                frame.date.granularity = 'month',
-                                frame.focus = variable,
-                                lags = seq(from = 2, to = 2) )
-  series <- temporary$frame[temporary$lagfields]
+variables <- c('minT', 'maxT', 'Rain')
+lags <- seq(from = 2, to = 2)
 
-  return(series)
-}
-lagged.variables <- lapply(X = c('minT', 'maxT', 'Rain'), FUN = extra)
-lagged.variables <- dplyr::bind_cols(lagged.variables)
-instances <- cbind(instances, lagged.variables)
+T <- TimeDependentLag(
+  frame = instances, frame.date = 'date', frame.date.granularity = 'month',
+  variables = variables, lags = lags)
+instances <- T$frame
 
 
-# fit
+
+# NaN
 condition <- !is.na(instances$rain_lag_2) | !is.na(instances$mint_lag_2) | !is.na(instances$maxt_lag_2)
 excerpt <- instances[condition, ]
+
+# Splitting
+quantity <- 12
+splitdate <- max(excerpt$date) %m-% months(x = quantity)
+training <- excerpt[ excerpt$date <= splitdate, ]
+testing <- excerpt[ excerpt$date > splitdate, ]
+
+# fit
 fit2.5 <- fit.matern(form =
                        as.formula(log(Cases) ~ time + I(pmax(time - 50, 0)) + I(time > 225)
                          + mint_lag_2 + maxt_lag_2 + rain_lag_2),
                      time = 'time',
                      start.cov.pars = c(1,5),
                      kappa = 2.5,
-                     data = excerpt,
+                     data = training,
                      method = 'nlminb')
 
 
@@ -58,22 +64,22 @@ fit2.5 <- fit.matern(form =
 estimates <- summary(fit2.5, log.cov.pars = TRUE)
 
 
-# the natural logarithm scale parameters
-parameters <- data.frame(estimates$cov.pars)
-parameters$interval <- qnorm(p = 0.975, lower.tail = TRUE) * parameters$StdErr
-parameters[, c('ln_lower_ci', 'ln_upper_ci')] <- parameters$Estimate +
-  matrix(data = parameters$interval) %*%  matrix(data = c(-1, 1), nrow = 1, ncol = 2)
-
-
-# exponentials of ...
-parameters[, c('lower_ci', 'upper_ci')] <- as.matrix(exp(parameters[, c('ln_lower_ci', 'ln_upper_ci')]))
+# confidence intervals
 
 
 # predictions
 predictor <- time.predict(
   fitted.model = fit2.5,
-  predictors = excerpt[, c('time', 'mint_lag_2', 'maxt_lag_2', 'rain_lag_2')],
-  time.pred = excerpt$time,
-  scale.pred = 'exponential')
+  predictors = testing[, c('time', 'mint_lag_2', 'maxt_lag_2', 'rain_lag_2')],
+  time.pred = testing$time,
+  scale.pred = 'linear')
 
-PredictionsGraph(predictor = predictor)
+PredictionsGraphLinear(predictor = predictor, original = testing$CasesLN)
+
+
+# bias, error
+bias <- mean(predictor$predictions -  testing$CasesLN)
+rmse <- sqrt( sum((predictor$predictions -  testing$CasesLN)^2) / nrow(testing) )
+
+
+
