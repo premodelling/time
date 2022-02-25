@@ -9,13 +9,16 @@ mal$Month <- factor(mal$Month,
                              "Aug","Sep","Oct","Nov","Dec"),ordered = TRUE)
 mal$t <- as.numeric(mal$Month) + 12*(mal$Year-1979)
 
-year.holdout <- 4
+# year.holdout: is the number of years that are part of the holdout data-set
+year.holdout <- 1
 time.split <- max(mal$t)-year.holdout*12
 
 plot(mal$t, log(mal$Cases),type="l")
 abline(v=time.split,col=2)
 
+# Identify the rows in the data-set that correspond to the training data-set
 train <- which(mal$t<=time.split)
+# Identify the rows in the data-set that correspond to the holdout data-set
 holdout <- which(mal$t>time.split)
 
 
@@ -27,9 +30,8 @@ fit0.5 <- fit.matern(form=
                      start.cov.pars = 1,
                      kappa=0.5,
                      fixed.rel.nugget = 0,
-                     data=mal[train,],
+                     data=mal[train,], # NOTE: selecting the training data
                      method="nlminb")
-summary(fit0.5,log.cov.pars=FALSE)
 
 fit1.5 <- fit.matern(form=
                        log(Cases) ~ t+I((t-50)*(t>50))+I(t>229)+
@@ -38,9 +40,8 @@ fit1.5 <- fit.matern(form=
                      time="t",
                      start.cov.pars = c(1,5),
                      kappa=1.5,
-                     data=mal[train,],
+                     data=mal[train,], # NOTE: selecting the training data
                      method="nlminb")
-summary(fit1.5,log.cov.pars=FALSE)
 
 fit2.5 <- fit.matern(form=
                        log(Cases) ~ t+I((t-50)*(t>50))+I(t>229)+
@@ -49,9 +50,9 @@ fit2.5 <- fit.matern(form=
                      time="t",
                      start.cov.pars = c(1,5),
                      kappa=2.5,
-                     data=mal[train,],
+                     data=mal[train,], # NOTE: selecting the training data
                      method="nlminb")
-summary(fit2.5,log.cov.pars=FALSE)
+
 
 t.pred.holdout <- (time.split+1):max(mal$t)
 pred0.5.holdout <- time.predict(fitted.model=fit0.5,
@@ -87,11 +88,23 @@ matplot(pred2.5.holdout$time.pred,
 points(mal[holdout,]$t,log(mal[holdout,]$Cases),pch=20)
 
 # Bias
+
+# kappa=0.5
 mean((pred0.5.holdout$predictions-log(mal[holdout,]$Cases)))
+
+# kappa=1.5
 mean((pred1.5.holdout$predictions-log(mal[holdout,]$Cases)))
+
+# kappa=2.5
 mean((pred2.5.holdout$predictions-log(mal[holdout,]$Cases)))
 
 # Root-mean-square error
+
+# kappa=0.5
 mean((pred0.5.holdout$predictions-log(mal[holdout,]$Cases))^2)
+
+# kappa=1.5
 mean((pred1.5.holdout$predictions-log(mal[holdout,]$Cases))^2)
+
+# kappa=2.5
 mean((pred2.5.holdout$predictions-log(mal[holdout,]$Cases))^2)
