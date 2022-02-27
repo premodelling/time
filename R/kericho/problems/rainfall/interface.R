@@ -5,10 +5,10 @@
 
 
 # external functions
-source(file = '../../StudyData.R')
-source(file = 'R/kericho/functions/TimeDependentLag.R')
-source(file = 'Graphs.R')
-source(file = 'Regression.R')
+source(file = 'R/kericho/StudyData.R')
+source(file = 'R/functions/TimeDependentLag.R')
+source(file = 'R/kericho/problems/rainfall/Graphs.R')
+source(file = 'R/kericho/problems/rainfall/Regression.R')
 
 
 # data
@@ -16,25 +16,24 @@ instances <- StudyData()
 
 
 # lagged rainfall series
-temporary <- TimeDependentLag(frame = instances, frame.date = 'date',
-                              frame.date.granularity = 'month', frame.focus = 'Rain', lags = seq(from = 0, to = 4) )
-head(temporary$frame[temporary$lagfields])
+dataset <- TimeDependentLag(frame = instances, frame.date = 'date',
+                              frame.date.granularity = 'month', variables = 'Rain', lags = seq(from = 0, to = 4) )
 
 
 # graphs of ln(cases) vs. lagged rainfall series
-RainSeriesGraphs(data = temporary$frame, lagfields = temporary$lagfields)
+RainSeriesGraphs(data = dataset$frame, lagfields = dataset$laggedfields)
 
 
 # correlation between ln(cases) and each lagged rainfall series
 correlation <- function (variable) {
-  y <- cor(x = temporary$frame$CasesLN, y = temporary$frame[variable], use = 'complete.obs', method = 'pearson') %>%
+  y <- cor(x = dataset$frame$CasesLN, y = dataset$frame[variable], use = 'complete.obs', method = 'pearson') %>%
     data.frame()
 }
-correlations <- dplyr::bind_cols(lapply(X = temporary$lagfields, FUN = correlation))
+correlations <- dplyr::bind_cols(lapply(X = dataset$laggedfields, FUN = correlation))
 row.names(correlations) <- 'correlation'
 correlations
 
 
 # regression
-regression <- Regression(data = temporary$frame, lagfields = temporary$lagfields)
+regression <- Regression(data = dataset$frame, lagfields = dataset$laggedfields)
 merge(x = regression, y = t(correlations), by = 0)
