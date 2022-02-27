@@ -31,7 +31,7 @@ ConfidenceInterval <- function (estimates, log.cov.pars = TRUE) {
 
   # exclude irrelevant fields
   parameters <- parameters %>%
-    select(!c('StdErr', 'interval'))
+    dplyr::select(!c('StdErr', 'interval'))
 
   return(parameters)
 
