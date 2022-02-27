@@ -7,9 +7,10 @@
 
 # external functions
 source(file = 'R/kericho/StudyData.R')
-source(file = 'R/kericho/functions/TimeDependentLag.R')
+source(file = 'R/functions/TimeDependentLag.R')
+source(file = 'R/functions/ConfidenceInterval.R')
 source(file = 'docs/programme/mathematics/auxiliary_function.R')
-source(file = 'R/kericho/problems/fourth/PredictionsGraph.R')
+source(file = 'R/kericho/problems/specified/PredictionsGraph.R')
 
 
 # data
@@ -40,17 +41,9 @@ fit2.5 <- fit.matern(form =
 
 # model estimates
 estimates <- summary(fit2.5, log.cov.pars = TRUE)
+intervals <- ConfidenceInterval(estimates = estimates, log.cov.pars = TRUE)
+intervals
 
-
-# the natural logarithm scale parameters
-parameters <- data.frame(estimates$cov.pars)
-parameters$interval <- qnorm(p = 0.975, lower.tail = TRUE) * parameters$StdErr
-parameters[, c('ln_lower_ci', 'ln_upper_ci')] <- parameters$Estimate +
-  matrix(data = parameters$interval) %*%  matrix(data = c(-1, 1), nrow = 1, ncol = 2)
-
-
-# exponentials of ...
-parameters[, c('lower_ci', 'upper_ci')] <- as.matrix(exp(parameters[, c('ln_lower_ci', 'ln_upper_ci')]))
 
 
 # predictions
@@ -60,4 +53,4 @@ predictor <- time.predict(
   time.pred = excerpt$time,
   scale.pred = 'exponential')
 
-PredictionsGraphNaturalLog(predictor = predictor)
+PredictionsGraphNaturalLog(predictor = predictor, original = excerpt$CasesLN)
