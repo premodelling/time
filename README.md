@@ -34,8 +34,8 @@ l( &phi;, &mu;(**&beta;**), &sigma; ) = - 0.5 n ln(2 &pi; &sigma;<sup>2</sup>) +
 
 <br>
 
-Hence, [MLEC.R](./R/kericho/likelihood/MLEC.R) called by 
-[InterfaceMLEC.R](./R/kericho/likelihood/InterfaceMLEC.R); [in interface.R](./R/kericho/modelling/interface.R)
+Hence, [MLEC.R](R/kericho/problems/trends/likelihood/MLEC.R) called by 
+[InterfaceMLEC.R](R/kericho/problems/trends/likelihood/InterfaceMLEC.R); [in Optimisation.R](R/kericho/problems/trends/Optimisation.R)
 
 <br>
 <br>
