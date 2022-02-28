@@ -5,12 +5,12 @@
 
 
 # external functions
-source(file = 'R/kericho/modelling/Modelling.R')
-source(file = 'R/kericho/modelling/CurvesOfPredictions.R')
-source(file = 'R/kericho/modelling/Autocorrelogram.R')
-source(file = 'R/kericho/likelihood/InterfaceMLEU.R')
-source(file = 'R/kericho/likelihood/InterfaceMLEC.R')
-source(file = 'R/kericho/modelling/Coefficients.R')
+source(file = 'R/kericho/problems/trends/Autocorrelogram.R')
+source(file = 'R/kericho/problems/trends/Coefficients.R')
+source(file = 'R/kericho/problems/trends/CurvesOfPredictions.R')
+source(file = 'R/kericho/problems/trends/Modelling.R')
+source(file = 'R/kericho/problems/trends/likelihood/InterfaceMLEU.R')
+source(file = 'R/kericho/problems/trends/likelihood/InterfaceMLEC.R')
 
 
 # for a variable in focus, e.g., minT, maxT, and Rain
