@@ -7,6 +7,9 @@
 source(file = 'R/kericho/problems/trends/likelihood/MLEC.R')
 
 
+#'
+#' In progress ... switch from optim() to nlminb()
+#'
 #' for estimating phi, mu, sigmasqr via MLEU()
 #'
 #' @param model: a lm() model from whence external regressors, i.e., its design matrix variables, are extracted
