@@ -4,7 +4,7 @@
 # Created on: 20/02/2022
 
 
-source(file = 'R/kericho/likelihood/MLEC.R')
+source(file = 'R/kericho/problems/trends/likelihood/MLEC.R')
 
 
 #' for estimating phi, mu, sigmasqr via MLEU()
