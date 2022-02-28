@@ -4,7 +4,7 @@
 # Created on: 16/02/2022
 
 
-source(file = 'R/kericho/StudyData.R')
+source(file = '../../StudyData.R')
 
 
 #'
