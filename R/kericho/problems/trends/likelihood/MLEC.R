@@ -5,6 +5,8 @@
 
 
 #'
+#' In progress ...
+#'
 #' @param par: c(beta_0, ..., beta_, phisqr, sigmasqr)
 #' @param df: a data frame of design variables & y
 #'
