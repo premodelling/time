@@ -4,6 +4,12 @@
 # Created on: 19/02/2022
 
 
+#'
+#' In progress ...
+#'
+#' @param par: c(beta_0, ..., beta_, phisqr, sigmasqr)
+#' @param df: a data frame of design variables & y
+#'
 MLEU <- function (par, df) {
 
   # the coefficients being estimated
