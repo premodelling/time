@@ -6,7 +6,7 @@
 
 InstallPackages <- function (){
 
-  packages <- c('tidyverse', 'ggplot2', 'moments', 'rmarkdown', 'stringr', 'latex2exp', 'mapview',
+  packages <- c('tidyverse', 'ggplot2', 'moments', 'rmarkdown', 'stringr', 'latex2exp', 'mapview', 'tseries',
                 'healthcareai', 'equatiomatic', 'rstatix', 'matrixStats', 'patchwork', 'geoR', 'PrevMap')
 
   # Install
@@ -23,7 +23,7 @@ InstallPackages <- function (){
     library(x, character.only = TRUE)
     if (x == 'rmarkdown') {library(tinytex)}
   }
-  lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic'))], .activate)
+  lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic', 'tseries'))], .activate)
 
   # Special Case
   if ('tidyverse' %in% packages) {
