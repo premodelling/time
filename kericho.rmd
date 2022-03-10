@@ -1,0 +1,314 @@
+---
+title: "Kericho"
+author: greyhypotheses
+output:
+  rmarkdown::pdf_document:
+    keep_tex: FALSE
+    citation_package: "default"
+    number_sections: FALSE
+    extra_dependencies:
+      - booktabs
+urlcolor: orange
+linkcolor: brown
+citecolor: green
+header-includes:
+  - \usepackage{color}
+  - \usepackage{caption}
+  - \usepackage{booktabs}
+  - \captionsetup[figure]{font={normalsize, color=gray}, width=.8\linewidth}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \newtheorem{theorem}{Theorem}
+  - \newtheorem{proposition}[theorem]{Proposition}
+  - \newtheorem{remark}{Remark}
+  - \newtheorem{definition}{Definition}
+  - \definecolor{darkgrey}{HTML}{4a4a4a}
+  - \titleformat*{\section}{\Large\color{darkgrey}}
+---
+
+
+
+<!--- Global Settings --->
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.table.format = 'latex')
+options(knitr.kable.NA = '')
+```
+
+
+<!--- Libraries --->
+```{r include = FALSE}
+library(xtable)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(matrixStats)
+library(lubridate)
+
+library(geoR)
+library(PrevMap)
+
+library(magrittr)
+library(latex2exp)
+library(patchwork)
+library(kableExtra)
+```
+
+The set of external functions used thus far - relative to, therefore based in, GitHub repository [premodelling/time](https://github.com/premodelling/time/tree/develop) - are
+
+<!--- External Functions --->
+\footnotesize
+```{r echo = TRUE, warning = FALSE, message = FALSE}
+  sys.source(file = 'R/kericho/StudyData.R', envir = knitr::knit_global())
+
+  sys.source(file = 'R/kericho/problems/explore/ExplorationGraph.R',
+             envir = knitr::knit_global())
+  sys.source(file = 'R/kericho/problems/rainfall/Graphs.R',
+           envir = knitr::knit_global())
+  sys.source(file = 'R/kericho/problems/specified/PredictionsGraph.R',
+             envir = knitr::knit_global())
+
+  sys.source(file = 'R/functions/TimeDependentLag.R', envir = knitr::knit_global())
+  sys.source(file = 'R/functions/ConfidenceInterval.R', envir = knitr::knit_global())
+
+  sys.source(file = 'docs/programme/mathematics/auxiliary_function.R',
+             envir = knitr::knit_global())
+```
+\normalsize
+
+\vspace{35pt}
+
+**Data Set-up**
+
+The original data set, with appended time dependent variables, is
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', warning = FALSE, message = FALSE}
+instances <- StudyData()
+str(object = instances)
+```
+\normalsize
+
+\clearpage
+
+# Exploring Relationships
+
+An exploration of the relationship between ln(cases) and maximum temperature, minimum temperature, and rain.
+
+```{r out.width = '60%', fig.height = 6.5, fig.align = 'center', fig.cap = 'the relationship between ln(cases) and maximum temperature, minimum temperature, and rain'}
+ExplorationGraphNL(instances = instances)
+```
+
+
+\clearpage
+
+# The Rainfall Series
+
+The function *TimeDependentLag()* creates lagged fields.  Hence, expression
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', echo = TRUE}
+  dataset <- TimeDependentLag(
+    frame = instances, frame.date = 'date', frame.date.granularity = 'month',
+    variables = 'Rain', lags = seq(from = 0, to = 4) )
+```
+\normalsize
+
+\vspace{10pt}
+
+creates lagged rainfall series; appended to the original data set.
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         '}
+head(dataset$frame) %>% tibble()
+```
+\normalsize
+
+\vspace{10pt}
+
+The graphs of *fig. 2* illustrate the relationship between ln(cases) and each lagged rainfall series. The numeric suffix of each graph's title denotes the rain series lag, in months.
+
+\vspace{10pt}
+
+```{r out.width = '65%', fig.height = 5.0, fig.align = 'center', fig.cap = 'ln(cases) and the lagged rainfall series.  the lags range from 0 to 4 months.'}
+RainSeriesGraphs(data = dataset$frame, lagfields = dataset$laggedfields)
+```
+
+\vspace{10pt}
+
+The degree of correlation between ln(cases) and each lagged rainfall series is quantifiable via the Pearson Correlation Coefficient.  The correlation values are:
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', digits = 3}
+correlation <- function (variable) {
+  y <- cor(x = dataset$frame$CasesLN, y = dataset$frame[variable], use = 'complete.obs', method = 'pearson') %>%
+    data.frame()
+}
+correlations <- dplyr::bind_cols(lapply(X = dataset$laggedfields, FUN = correlation))
+row.names(correlations) <- 'ln(cases)'
+correlations
+```
+\normalsize
+
+
+\clearpage
+
+# Exploring a Specific Model
+
+Considering the time series model
+
+\begin{align}
+Y(t) &= \beta_{0} + \beta_{1}t + \beta_{2}I(pmax({t - 50, 0})) + \beta_{3}I(t > 225) \nonumber \\
+     & \qquad + \beta_{4} minT(t - k) + \beta_{5} maxT(t - k) + \beta_{6}Rain(t - k)  \nonumber \\
+     & \qquad \qquad + \mathcal{W}(t) + Z(t)
+\end{align}
+
+for the Kericho malaria cases data, wherein
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c p{0.45\linewidth}l}\footnotesize
+variable & description \\ \hline
+$t$ & time (months) \\
+$minT$ & mininum temperature \\
+$maxT$ & maximum temperature \\
+$Rain$ & rainfall (millimetres) \\
+$k$ & lag; $k = 2$ months \\
+$\mathcal{W}(t)$ & A Matern processwhereby $\kappa = 2.5$ \\
+$Z(t)$ & Gaussian noise \\
+\end{tabular}
+\end{center}
+
+\vspace{20pt}
+
+
+
+The function *TimeDependentLag()* creates lagged fields.  Hence, the lagged minimum temperature, maximum temperature, and rain fields:
+
+\vspace{10pt}
+
+\footnotesize
+```{r echo = TRUE, warning = FALSE, message = FALSE}
+
+  variables <- c('minT', 'maxT', 'Rain')
+
+  T <- TimeDependentLag(
+    frame = instances, frame.date = 'date', frame.date.granularity = 'month',
+    variables = variables, lags = seq(from = 2, to = 2))
+  dataset <- T$frame
+```
+\normalsize
+
+\vspace{20pt}
+
+\footnotesize
+```{r comment = '         ', warning = FALSE, message = FALSE}
+str(object = dataset)
+```
+\normalsize
+
+
+\clearpage
+
+## Exercise 1: Model Fitting
+
+\vspace{10pt}
+
+Prior to fitting *Eq. 1*, records that have `NaN` values ...
+
+\vspace{10pt}
+
+\footnotesize
+```{r echo = TRUE}
+  condition <- !is.na(dataset$rain_lag_2) | !is.na(dataset$mint_lag_2) | !is.na(dataset$maxt_lag_2)
+  excerpt <- dataset[condition, ]
+```
+\normalsize
+
+\vspace{10pt}
+
+Hence, via the `fit.matern()` function
+
+\footnotesize
+```{r  echo = TRUE, results = 'hide', warning = FALSE, message = FALSE}
+fit2.5 <- fit.matern(
+  form = as.formula(log(Cases) ~ time + I(pmax(time - 50, 0)) + I(time > 225)
+    + mint_lag_2 + maxt_lag_2 + rain_lag_2),
+  time = 'time',
+  start.cov.pars = c(1,5),
+  kappa = 2.5,
+  data = excerpt,
+  method = 'nlminb')
+```
+\normalsize
+
+\vspace{10pt}
+
+The summary of the model fitted for *Eq. 1* is
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', warning = FALSE, message = FALSE}
+estimates <- summary(fit2.5, log.cov.pars = TRUE)
+estimates
+```
+\normalsize
+
+\vspace{10pt}
+
+The parameter $\sigma^{2}$, $\phi^{2}$, and $\tau^{2}$, and their confidence intervals, are:
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', warning = FALSE, message = FALSE}
+intervals <- ConfidenceInterval(estimates = estimates, log.cov.pars = TRUE)
+intervals %>%
+  round(digits = 3)
+```
+\normalsize
+
+\clearpage
+
+## Exercise 2: Predictions
+
+\vspace{10pt}
+
+The foci herein are the $ln(cases)$ point predictions, and their 95% prediction intervals, w.r.t. the months of the Kericho data set.  The $time.predict()$ function of *auxiliary_function.R*
+
+\vspace{10pt}
+
+\footnotesize
+```{r comment = '         ', echo = TRUE}
+predictor <- time.predict(
+  fitted.model = fit2.5,
+  predictors = excerpt[, c('time', 'mint_lag_2', 'maxt_lag_2', 'rain_lag_2')],
+  time.pred = excerpt$time,
+  scale.pred = 'exponential')
+```
+\normalsize
+
+\vspace{10pt}
+
+creates the $time.predict()$ object of predictions, including the confidence intervals. The resulting graph (*fig. 3*) illustrates the curve's confidence intervals band.
+
+\vspace{10pt}
+
+```{r out.width = '65%', fig.align = 'center', results = 'hide', fig.cap = 'Predictions: ln(cases) and confidence interval'}
+PredictionsGraphNaturalLog(predictor = predictor, original = excerpt$CasesLN)
+```
+
+\vspace{10pt}
+
+
+

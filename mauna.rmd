@@ -1,0 +1,58 @@
+---
+title: "Mauna"
+author: greyhypotheses
+output:
+  rmarkdown::pdf_document:
+    keep_tex: FALSE
+    citation_package: "default"
+    number_sections: FALSE
+    extra_dependencies:
+      - booktabs
+urlcolor: orange
+linkcolor: brown
+citecolor: green
+header-includes:
+  - \usepackage{color}
+  - \usepackage{caption}
+  - \usepackage{booktabs}
+  - \captionsetup[figure]{font={normalsize, color=gray}, width=.8\linewidth}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \newtheorem{theorem}{Theorem}
+  - \newtheorem{proposition}[theorem]{Proposition}
+  - \newtheorem{remark}{Remark}
+  - \newtheorem{definition}{Definition}
+  - \definecolor{darkgrey}{HTML}{4a4a4a}
+  - \titleformat*{\section}{\Large\color{darkgrey}}
+---
+
+
+<!--- Global Settings --->
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(knitr.table.format = 'latex')
+options(knitr.kable.NA = '')
+```
+
+
+<!--- Libraries --->
+```{r include = FALSE}
+library(xtable)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(matrixStats)
+
+
+library(magrittr)
+library(latex2exp)
+library(patchwork)
+library(kableExtra)
+```
+
+<!--- External Functions --->
+```{r}
+sys.source(file = '', envir = knitr::knit_global())
+```
+
