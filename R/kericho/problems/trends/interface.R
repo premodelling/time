@@ -12,7 +12,7 @@ source(file = 'R/kericho/problems/trends/Coefficients.R')
 
 
 # for a variable in focus, e.g., minT, maxT, and Rain
-variable <- 'maxT'
+variable <- 'minT'
 
 
 # ... the modelling data set, such that observations wherein variable = NaN are excluded
@@ -23,6 +23,19 @@ ModellingDataGraph(variable = variable)
 # ... a model expresion that excludes a linear trend
 expr <- 'sin(2*pi*time/12) + cos(2*pi*time/12) + sin(2*pi*time/6) + cos(2*pi*time/6)'
 lrdetails <- ModellingLinear(variable = variable, expr = expr)
+
+predictions <- cbind(data[, c(variable, 'time')], prediction = lrdetails$model$fitted.values)
+predictions %>%
+  gather(key = 'data', value = 'value', -time) %>%
+  ggplot(mapping = aes(x = time, y = value, colour = factor(data))) +
+  geom_line(alpha = 0.65) +
+  scale_colour_manual(values = c('black', 'orange')) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(size = 0.05))
+
+
+
 ardetails <- ModellingAutoregressive(variable = variable, expr = expr)
 
 
@@ -43,5 +56,3 @@ arlikelihood <- ardetails$model$loglik
 
 
 # ... custom optimisation
-
-
