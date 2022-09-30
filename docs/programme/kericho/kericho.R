@@ -1,7 +1,7 @@
 rm(list=ls())
 
-source("auxiliary_function.R")
-mal <- read.csv("Kericho.csv")
+source('docs/programme/mathematics/auxiliary_function.R')
+mal <- read.csv('docs/programme/kericho/kericho.csv')
 
 mal$Month <- factor(mal$Month, 
                         levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul",
