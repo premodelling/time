@@ -183,7 +183,7 @@ $minT$ & mininum temperature \\
 $maxT$ & maximum temperature \\
 $Rain$ & rainfall (millimetres) \\
 $k$ & lag; $k = 2$ months \\
-$\mathcal{W}(t)$ & A Matern processwhereby $\kappa = 2.5$ \\
+$\mathcal{W}(t)$ & A Matern process whereby $\kappa = 2.5$ \\
 $Z(t)$ & Gaussian noise \\
 \end{tabular}
 \end{center}
