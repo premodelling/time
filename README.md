@@ -6,6 +6,8 @@
 
 ### References
 
+<br>
+
 **Kernel Covariance Functions**
 * https://www.mathworks.com/help/stats/kernel-covariance-function-options.html
 * https://docs.pymc.io/en/v3/api/gp/cov.html?highlight=matern
