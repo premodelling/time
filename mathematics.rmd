@@ -1,0 +1,227 @@
+---
+title: "Background Notes"
+author: greyhypotheses
+urlcolor: olive
+linkcolor: brown
+citecolor: orange
+documentclass:
+  - article
+classoption:
+  - fleqn
+geometry:
+  - a4paper
+output:
+  bookdown::pdf_document2:
+    keep_tex: FALSE
+    toc: FALSE
+    citation_package: "default"
+    number_sections: FALSE
+    extra_dependencies:
+      - booktabs
+header-includes:
+  - \usepackage{color}
+  - \usepackage{caption}
+  - \usepackage{booktabs}
+  - \usepackage{xcolor}
+  - \usepackage{titlesec}
+  - \usepackage{tikz}
+  - \usepackage{hyperref}
+  - \usepackage[nameinlink, capitalize]{cleveref}
+  - \newtheorem{theorem}{Theorem}
+  - \newtheorem{proposition}[theorem]{Proposition}
+  - \newtheorem{remark}{Remark}
+  - \newtheorem{definition}{Definition}
+  - \captionsetup[figure]{font={small, color=gray}, width=.8\linewidth}
+  - \definecolor{darkgrey}{HTML}{5b5b5b}
+  - \definecolor{lightgrey}{HTML}{7f7f7f}
+  - \definecolor{duskyolive}{HTML}{bcbc8b}
+  - \titleformat*{\section}{\Large\color{darkgrey}}
+  - \usetikzlibrary {angles, quotes}
+  - \creflabelformat{equation}{#2\textup{#1}#3}
+---
+
+
+# Seasonal Patterns
+
+In pure mathematics, one of the angle sum identity theorems states that
+
+\vspace{10pt}
+
+> \begin{theorem}[Angle Sum Identity]
+  \label{trigonometry}
+  If $\alpha$ \& $\phi$ are each acute angles of two distinct right-angled triangles, and $\alpha$ \& $\phi$ are adjacent, then
+  \begin{equation}
+  A \: sin(\alpha + \phi) \; \equiv \; a \: sin \alpha \: cos \phi \; + \; b \: cos \alpha \: sin \phi  (\#eq:0001)
+  \end{equation}
+\end{theorem}
+
+\vspace{10pt}
+
+Hence, and for seasonal pattern modelling purposes, the expression
+
+\begin{equation}
+  A sin(2 \pi f t + \phi)  (\#eq:0002)
+\end{equation}
+
+is expressible as
+
+\begin{equation}
+  A \: sin(2 \pi f t + \phi) \; \equiv \; a \: sin(2 \pi f t) + b \: cos(2 \pi f t)  (\#eq:0003)
+\end{equation}
+
+if $A$ & $\phi$ values exist for the expression
+
+\begin{equation}
+  A sin(2{\pi}ft) \: cos{\phi} \; + \; A cos(2{\pi}ft) \: sin{\phi}  \; \equiv \;
+a \: sin(2{\pi}ft) \; +  \; b \: cos(2{\pi}ft)  (\#eq:0004)
+\end{equation}
+
+\vspace{10pt}
+
+**Proof**
+
+By the coefficients of *\cref{eq:0004}*
+
+\begin{align}
+a & = A cos \phi (\#eq:0005) \\
+b & = A sin \phi (\#eq:0006)
+\end{align}
+
+\vspace{10pt}
+
+The quotient of *\cref{eq:0005}* & *\cref{eq:0006}* is
+
+\begin{equation}
+\frac{a}{b} = \frac{cos \phi}{sin \phi} = tan \phi (\#eq:0007)
+\end{equation}
+
+*\cref{eq:0007}* is in line with a right-angled triangle with acute angle $\phi$, i.e., *\cref{fig:0001}*.  By the Pythagoras theorem, the length of the hypotenuse side of the acute right-angled triangle is
+
+\begin{equation}
+\sqrt{a^{2} + b^{2}} (\#eq:0010)
+\end{equation}
+
+\vspace{10pt}
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\coordinate (A) at (3, 0);
+\coordinate (B) at (6, 0);
+\coordinate (C) at (6, 4);
+\draw[orange, thick] (A) -- node[midway, below] {$a$}
+                     (B) -- node[midway, right] {$b$}
+                     (C) -- node[midway, sloped, above] {$\sqrt{a^2 + b^2}$} cycle;
+\pic[draw = orange!50, angle radius = 7mm, font = \footnotesize, "$\phi$"] {angle = B--A--C};
+\end{tikzpicture}
+\end{center}
+\caption{An acute right-angled triangle}
+\label{fig:0001}
+\end{figure}
+
+\vspace{10pt}
+
+
+*\cref{eq:0010}* is derivable from *\cref{eq:0005}* & *\cref{eq:0006}*, i.e.,
+
+\begin{equation}
+a^{2} + b^{2} = A^{2}cos^{2}\phi + A^{2}sin^{2}\phi = A^{2} (\#eq:0008)
+\end{equation}
+
+$\Rightarrow$
+
+\begin{equation}
+A =  \sqrt{a^{2} + b^{2}} (\#eq:0009)
+\end{equation}
+
+Therefore, $A$ exists; it is the length of the hypotenuse of the acute right-angled triangle (*\cref{fig:0001}*).  Altogether, $A$ & $\phi$ exists.
+
+
+\clearpage
+
+# Sum & Product Rules
+
+
+\footnotesize
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\node (A) at (-0.01, 1.23) [lightgrey, left] {$\mbox{\scriptsize $y_{_{j}}$}$};
+\node (B) at (1.75, -0.01) [lightgrey, below] {$\mbox{\scriptsize $x_{_{i}}$}$};
+\node (C) at (1.75, 1.23) [lightgrey] {$\mbox{\scriptsize $n_{_{ij}}$}$};
+\node (D) at (3.41, 1.23) [lightgrey, right, yshift = -1mm] { $\mbox{ \scriptsize $r_{j} = \sum\limits_{i} {n_{_{ij}}}$ }$ };
+\node (E) at (1.75, 1.23) [lightgrey, rotate = 90, right, xshift = 10mm, yshift = -1mm] { $\mbox{ \scriptsize $c_{i} = \sum\limits_{j} {n_{_{ij}}}$ }$ };
+\draw[step = 0.5cm, darkgrey, line width = 0.01mm] (0.01, 0.01) grid (3.4, 2.4);
+\end{tikzpicture}
+\end{center}
+\caption{Events}
+\label{fig:0002}
+\end{figure}
+\normalsize
+
+\vspace{35pt}
+
+## The marginal; sum rule
+
+\begin{equation}
+p(X = x_{i}) = \frac{c_{i}}{N}
+\end{equation}
+
+**but**
+
+\begin{equation}
+c_{i} = \sum\limits_{j} {n_{ij}}
+\end{equation}
+
+**and**
+
+\begin{equation}
+p(X = x_{i}, Y = y_{j}) = \frac{n_{ij}}{N}
+\end{equation}
+
+$\Rightarrow$
+
+\begin{equation}
+n_{ij} = N p(X = x_{i}, Y = y_{j})
+\end{equation}
+
+Hence
+
+\begin{align}
+p(X = x_{i}) & = \frac{c_{i}}{N}  \\
+             & = \frac{1}{N} \sum\limits_{j} {n_{ij}} \\
+             & = \frac{1}{N} \sum\limits_{j} {N p(X = x_{i}, Y = y_{j})} \\
+             & = \sum\limits_{j} {p(X = x_{i}, Y = y_{j})}
+\end{align}
+
+
+\vspace{35pt}
+
+## The joint; product rule
+
+\begin{align}
+p(X = x_{i}, Y = y_{j}) & = \frac{n_{ij}}{N} \\
+                        & = \frac{n_{ij}}{c_{i}} \times  \frac{c_{i}}{N}
+\end{align}
+
+**but**
+
+\begin{equation}
+p(Y = y_{j} | X = x_{i}) = \frac{n_{ij}}{c_{i}}
+\end{equation}
+
+**and**
+
+\begin{equation}
+p(X = x_{i}) = \frac{c_{i}}{N}
+\end{equation}
+
+
+Hence
+
+\begin{align}
+p(X = x_{i}, Y = y_{j}) & = \frac{n_{ij}}{N} \\
+                        & = \frac{n_{ij}}{c_{i}} \times  \frac{c_{i}}{N} \\
+                        & = p(Y = y_{j} | X = x_{i}) p(X = x_{i})
+\end{align}
+

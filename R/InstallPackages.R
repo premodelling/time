@@ -7,7 +7,8 @@
 InstallPackages <- function (){
 
   packages <- c('tidyverse', 'ggplot2', 'moments', 'rmarkdown', 'stringr', 'latex2exp', 'mapview', 'tseries',
-                'healthcareai', 'equatiomatic', 'rstatix', 'matrixStats', 'patchwork', 'geoR', 'PrevMap')
+                'healthcareai', 'equatiomatic', 'rstatix', 'matrixStats', 'patchwork', 'geoR', 'PrevMap',
+                'kableExtra', 'bookdown')
 
   # Install
   .install <- function(x){

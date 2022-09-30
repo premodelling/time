@@ -1,7 +1,7 @@
 rm(list=ls())
 
-source("auxiliary_function.R")
-mal <- read.csv("Kericho.csv")
+source('docs/programme/mathematics/auxiliary_function.R')
+mal <- read.csv('docs/programme/kericho/kericho.csv')
 
 mal$Month <- factor(mal$Month, 
                     levels=c("Jan","Feb","Mar","Apr","May","Jun","Jul",
@@ -26,6 +26,6 @@ matplot(env$u,cbind(env$v.lower,vari.lm1$v,env$v.upper),type="l",
         col=1,lty=c("dashed","solid","dashed"),
         ylim=c(0,0.3),
         xlab="Time separation (months)",
-        ylab="Variogram")
+        ylab="Variogram", plot.frame = FALSE)
 plot(residuals(lm1),xlab = "time (months, 1=January 1979)",
      ylab="residuals",type="l")

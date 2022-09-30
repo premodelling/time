@@ -79,17 +79,3 @@ ModellingAutoregressive <- function(variable, expr) {
   return(list(model = armodel, estimates = estimates))
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
